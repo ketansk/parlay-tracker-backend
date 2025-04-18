@@ -28,5 +28,5 @@ type Game {
 type Query {
     liveGames: [Game]
     teamRoster(teamId: String!): [Player]
-    livePlayerStats(gameId: String!): [PlayerStats]
+    livePlayerStats(gameId: String!, playerIds: [String]): [PlayerStats]
     }

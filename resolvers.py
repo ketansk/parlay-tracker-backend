@@ -38,11 +38,15 @@ def resolve_live_games(*_):
 
 
 @query.field("livePlayerStats")
-def resolve_live_player_stats(_, info, gameId):
+def resolve_live_player_stats(_, info, gameId, playerIds=[]):
     url = f"{BASE_URL}/getNBABoxScore"
     params = {"gameID": gameId}
     response = requests.get(url, headers=HEADERS, params=params)
     players = response.json().get("body", {}).get("playerStats", {})
+    if playerIds:
+        player_id_set = set(playerIds)
+    else:
+        player_id_set = set(players.keys())
 
     return [
         {
@@ -54,7 +58,7 @@ def resolve_live_player_stats(_, info, gameId):
             "steals": players[player].get("stl"),
             "blocks": players[player].get("blk"),
         }
-        for player in players
+        for player in players if player in player_id_set
     ]
 
 
