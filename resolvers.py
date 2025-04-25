@@ -1,13 +1,15 @@
 from datetime import date, timedelta
 import os
 import requests
-from ariadne import QueryType
+from ariadne import QueryType, MutationType
 from cache_helpers import get_cached_data,save_to_cache
+from db_helpers import save_parlay
 
 
 query = QueryType()
+mutation = MutationType()
 
-DAYS_BACK = 1
+DAY_OFFSET = 0
 
 HEADERS = {
     "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY"),
@@ -19,7 +21,7 @@ BASE_URL = "https://tank01-fantasy-stats.p.rapidapi.com"
 @query.field("liveGames")
 def resolve_live_games(*_):
     url = f"{BASE_URL}/getNBAScoresOnly"
-    game_date = date.today() - timedelta(DAYS_BACK)
+    game_date = date.today() + timedelta(DAY_OFFSET)
     params = {"gameDate": game_date.strftime("%Y%m%d")}
     response = requests.get(url, headers=HEADERS, params=params)
     games = response.json().get("body", {})
@@ -87,3 +89,21 @@ def resolve_team_roster(_, info, teamId):
         }
         for p in players
     ]
+
+
+@mutation.field("saveParlay")
+def resolve_save_parlay(_, info, input):
+    parlay_data = {
+        "user_id": input["user_id"],
+        "wager": input["wager"],
+        "odds": input["odds"],
+        "status": input["status"],
+        "legs": input["legs"],
+    }
+
+    parlay_id = save_parlay(parlay_data)
+
+    return {
+        "success": True,
+        "parlay_id": parlay_id
+    }

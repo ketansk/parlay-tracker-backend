@@ -20,13 +20,36 @@ type Game {
     id: ID
     homeTeam: String
     awayTeam: String
-    homeScore: Int
-    awayScore: Int
-    gameClock: String
+    homeScore: String!
+    awayScore: String!
+    gameClock: String!
     }
+
+input ParlayLegInput {
+    match: String
+    bet: String
+    result: String
+    }
+
+input SaveParlayInput {
+    user_id: String
+    wager: Float
+    odds: Float
+    status: String
+    legs: [ParlayLegInput]
+    }
+
+type SaveParlayResponse {
+  success: Boolean!
+  parlay_id: Int!
+}
 
 type Query {
     liveGames: [Game]
     teamRoster(teamId: String!): [Player]
     livePlayerStats(gameId: String!, playerIds: [String]): [PlayerStats]
     }
+
+type Mutation {
+    saveParlay(input: SaveParlayInput): SaveParlayResponse
+}
