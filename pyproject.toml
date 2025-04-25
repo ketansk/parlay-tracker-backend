@@ -10,12 +10,10 @@ python = "^3.10"
 ariadne = "^0.26.1"
 fastapi = "^0.115.12"
 nba_api = "^1.9.0"
+black = "^25.1.0"
 dotenv = "^0.9.9"
 tinydb = "^4.8.2"
-pydantic = "^2.11.3"
 
-[tool.poetry.group.dev.dependencies]
-black = "^25.1.0"
 
 [build-system]
 requires = ["poetry-core"]
