@@ -2,7 +2,7 @@ from datetime import date, timedelta
 import os
 import requests
 from ariadne import QueryType, MutationType
-from cache_helpers import get_cached_data,save_to_cache
+from cache_helpers import get_cached_data, save_to_cache
 from db_helpers import save_parlay, get_parlays_by_user
 
 
@@ -13,10 +13,11 @@ DAY_OFFSET = 0
 
 HEADERS = {
     "X-RapidAPI-Key": os.getenv("RAPIDAPI_KEY"),
-    "X-RapidAPI-Host": os.getenv("RAPIDAPI_HOST")
+    "X-RapidAPI-Host": os.getenv("RAPIDAPI_HOST"),
 }
 
 BASE_URL = "https://tank01-fantasy-stats.p.rapidapi.com"
+
 
 @query.field("liveGames")
 def resolve_live_games(*_):
@@ -60,7 +61,8 @@ def resolve_live_player_stats(_, info, gameId, playerIds=[]):
             "steals": players[player].get("stl"),
             "blocks": players[player].get("blk"),
         }
-        for player in players if player in player_id_set
+        for player in players
+        if player in player_id_set
     ]
 
 
@@ -71,11 +73,7 @@ def resolve_team_roster(_, info, teamId):
         url = f"{BASE_URL}/getNBATeamRoster"
         params = {"teamAbv": teamId}
         print("FETCHING TEAM ROSTER")
-        response = requests.get(
-            url, 
-            headers=HEADERS,
-            params=params
-            )
+        response = requests.get(url, headers=HEADERS, params=params)
         players = response.json()["body"]["roster"]
         save_to_cache(players, teamId)
 
@@ -117,7 +115,4 @@ def resolve_save_parlay(_, info, input):
 
     parlay_id = save_parlay(parlay_data)
 
-    return {
-        "success": True,
-        "parlay_id": parlay_id
-    }
+    return {"success": True, "parlay_id": parlay_id}
