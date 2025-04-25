@@ -39,6 +39,19 @@ input SaveParlayInput {
     legs: [ParlayLegInput]
     }
 
+type ParlayLeg {
+    match: String
+    bet: String
+    result: String
+}
+
+type Parlay {
+    wager: Float
+    odds: Float
+    status: String
+    legs: [ParlayLeg]
+    }
+
 type SaveParlayResponse {
   success: Boolean!
   parlay_id: Int!
@@ -48,6 +61,7 @@ type Query {
     liveGames: [Game]
     teamRoster(teamId: String!): [Player]
     livePlayerStats(gameId: String!, playerIds: [String]): [PlayerStats]
+    fetchParlay(userId: String): [Parlay]
     }
 
 type Mutation {

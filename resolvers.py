@@ -3,7 +3,7 @@ import os
 import requests
 from ariadne import QueryType, MutationType
 from cache_helpers import get_cached_data,save_to_cache
-from db_helpers import save_parlay
+from db_helpers import save_parlay, get_parlays_by_user
 
 
 query = QueryType()
@@ -88,6 +88,20 @@ def resolve_team_roster(_, info, teamId):
             "headshot": p["nbaComHeadshot"],
         }
         for p in players
+    ]
+
+
+@query.field("fetchParlay")
+def resolve_fetch_parlay(_, info, userId):
+    parlays = get_parlays_by_user(userId)
+    return [
+        {
+            "wager": p["wager"],
+            "odds": p["odds"],
+            "status": p["status"],
+            "legs": p["legs"],
+        }
+        for p in parlays
     ]
 
 
