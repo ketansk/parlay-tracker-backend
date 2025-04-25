@@ -436,7 +436,7 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "15a34b2ab65a9f9cbe4ed8770c98eda5ed51c50897d7b1337057f6e728ecca04"
+content-hash = "0370092f78eda8d93d84e838a106580dd711c770b21bfd48f9f4c618dad18a57"
 
 [metadata.files]
 annotated-types = [
