@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 type_defs = open("app/graphql/schema.graphql").read()
-schema = make_executable_schema(type_defs, [query, mutation], snake_case_fallback_resolvers)
+schema = make_executable_schema(
+    type_defs, [query, mutation], snake_case_fallback_resolvers
+)
 
 app = FastAPI()
 app.mount("/graphql", GraphQL(schema, debug=True))

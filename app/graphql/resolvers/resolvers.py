@@ -106,13 +106,15 @@ def resolve_fetch_parlay(_, info, userId: str):
 
 @mutation.field("saveParlay")
 def resolve_save_parlay(_, info, parlay):
-    parlay_obj = Parlay({
-        "user_id": parlay["user_id"],
-        "wager": parlay["wager"],
-        "odds": parlay["odds"],
-        "status": parlay["status"],
-        "legs": [ParlayLeg(**leg) for leg in parlay["legs"]],
-    })
+    parlay_obj = Parlay(
+        {
+            "user_id": parlay["user_id"],
+            "wager": parlay["wager"],
+            "odds": parlay["odds"],
+            "status": parlay["status"],
+            "legs": [ParlayLeg(**leg) for leg in parlay["legs"]],
+        }
+    )
 
     parlay_id = save_parlay(parlay_obj)
 
