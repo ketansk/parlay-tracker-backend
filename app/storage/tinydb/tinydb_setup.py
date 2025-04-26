@@ -1,5 +1,7 @@
 from tinydb import TinyDB, Query
 from datetime import datetime
+from app.models.parlay_models import ParlayStatus
+import uuid
 
 # Create or open the TinyDB JSON file
 db = TinyDB("sports_tracker_data.json")
@@ -21,9 +23,10 @@ def insert_sample_data():
             "user_id": "init_user",
             "wager": 25,
             "odds": 8,
-            "status": "pending",
             "legs": [],
-            "created_at": datetime.utcnow().isoformat(),
+            "status": ParlayStatus.PENDING.value,
+            "parlay_id": uuid.uuid4(),
+            "metadata": {"created_at": datetime.utcnow().isoformat()},
         }
     )
 

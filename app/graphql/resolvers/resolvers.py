@@ -2,6 +2,7 @@ from datetime import date, timedelta
 import os
 import requests
 from ariadne import QueryType, MutationType
+from app.models.parlay_models import Parlay, ParlayLeg
 from app.services.cache_helpers import get_cached_data, save_to_cache
 from app.storage.tinydb.tinydb_helpers import save_parlay, get_parlays_by_user
 
@@ -90,7 +91,7 @@ def resolve_team_roster(_, info, teamId):
 
 
 @query.field("fetchParlay")
-def resolve_fetch_parlay(_, info, userId):
+def resolve_fetch_parlay(_, info, userId: str):
     parlays = get_parlays_by_user(userId)
     return [
         {
@@ -104,15 +105,15 @@ def resolve_fetch_parlay(_, info, userId):
 
 
 @mutation.field("saveParlay")
-def resolve_save_parlay(_, info, input):
-    parlay_data = {
-        "user_id": input["user_id"],
-        "wager": input["wager"],
-        "odds": input["odds"],
-        "status": input["status"],
-        "legs": input["legs"],
-    }
+def resolve_save_parlay(_, info, parlay):
+    parlay_obj = Parlay({
+        "user_id": parlay["user_id"],
+        "wager": parlay["wager"],
+        "odds": parlay["odds"],
+        "status": parlay["status"],
+        "legs": [ParlayLeg(**leg) for leg in parlay["legs"]],
+    })
 
-    parlay_id = save_parlay(parlay_data)
+    parlay_id = save_parlay(parlay_obj)
 
     return {"success": True, "parlay_id": parlay_id}

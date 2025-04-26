@@ -40,7 +40,7 @@ input SaveParlayInput {
     }
 
 type ParlayLeg {
-    match: String
+    gameId: String
     bet: String
     result: String
 }

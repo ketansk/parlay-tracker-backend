@@ -16,15 +16,8 @@ meta_table = db.table("meta")
 ### 🔁 PARLAYS
 
 
-def save_parlay(parlay_data: dict):
-    legs = [ParlayLeg(**leg) for leg in parlay_data["legs"]]
-    parlay = Parlay(
-        wager=parlay_data["wager"],
-        odds=parlay_data["odds"],
-        legs=legs,
-        status="pending",
-    )
-    doc = parlay.dict()
+def save_parlay(parlay_obj: Parlay):
+    doc = parlay_obj.dict()
     doc["parlay_id"] = str(uuid.uuid4())
     parlays_table.insert(doc)
     return doc
